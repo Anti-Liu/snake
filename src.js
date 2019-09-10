@@ -1,12 +1,16 @@
 window.onload = function(){
   const container = document.getElementById('container');
   class Snake {
-    status = [{x:200,y:0},{x:180,y:0},{x:160,y:0}]; //每节蛇身的位置
-    d = 'right'; // 方向
-    x = 20;
-    y = 0;
+    status; //每节蛇身的位置
+    d; // 方向
+    x;
+    y;
     
     init() {
+      this.d = 'right'; // 方向
+      this.x = 20;
+      this.y = 0;
+      this.status = [{x:200,y:0},{x:180,y:0},{x:160,y:0}];
       this.status.forEach((lf)=>{
         const ele = document.createElement("div");
         ele.className = 'ele';
@@ -18,6 +22,18 @@ window.onload = function(){
     }
 
     run() {
+      const { offsetLeft, offsetWidth, offsetTop, offsetHeight } = container;
+      const h = offsetHeight + offsetTop;
+      const w = offsetLeft + offsetWidth;
+      const bx = this.status[0].x+this.x;
+      const by =  this.status[0].y+this.y;
+      if(bx < offsetLeft || bx > w || by < offsetTop || by > h || bx === w || by === h){
+        alert("游戏结束");
+        clearInterval(timer);
+        container.innerHTML = ""
+        this.init();
+        return;
+      }
       const eles =  Array.from(container.getElementsByTagName('div'));
       for(let i = eles.length -1; i > 0; i--){
         this.status[i].x = this.status[i-1].x;
@@ -29,19 +45,14 @@ window.onload = function(){
       this.status[0].x = this.status[0].x + this.x;
       this.status[0].y = this.status[0].y + this.y;
       
-      console.log(this.status[0], this.d,  111, this.x, this.y)
+      // console.log(this.status[0], this.d,  111, this.x, this.y)
 
       eles[0].style.left = this.status[0].x + 'px';
       eles[0].style.top = this.status[0].y + 'px';
-      this.turn();
     }
 
     eat() {
       
-    }
-
-    destroy() {
-
     }
 
 
@@ -86,7 +97,7 @@ window.onload = function(){
     }
     // console.log(snake.d, snake.x, snake.y)
   }
-  setInterval(()=>{
+  const timer = setInterval(()=>{
     snake.run();
   }, 500);
 
