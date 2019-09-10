@@ -92,8 +92,23 @@ window.onload = function(){
       this.ele.style.background = 'red';
       this.ele.style.position = 'absolute';
       this.x = Math.floor(Math.random() * container.offsetWidth / 20) * 20;
-      this.ele.style.left = this.x + 'px';
       this.y = Math.floor(Math.random() * container.offsetHeight / 20) * 20;
+      let f; //食物位置是否在蛇身上
+      snake.status.forEach(ele=>{
+        if(ele.x === this.x && ele.y === this.y){
+          f = true;
+        }
+      })
+      while(f){
+        this.x = Math.floor(Math.random() * container.offsetWidth / 20) * 20;
+        this.y = Math.floor(Math.random() * container.offsetHeight / 20) * 20;
+        snake.status.forEach(ele=>{
+          if(ele.x !== this.x || ele.y !== this.y){
+            f = false;
+          }
+        })
+      }
+      this.ele.style.left = this.x + 'px';
       this.ele.style.top = this.y + 'px';
       document.body.appendChild(this.ele);
     }
